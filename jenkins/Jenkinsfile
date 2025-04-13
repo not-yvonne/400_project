@@ -17,6 +17,7 @@ pipeline {
     stage('Build') {
       steps {
         sh './gradlew clean assemble'
+        sh 'docker build -t my-repo/my-image:${BUILD_NUMBER} .'
       }
     }
 
@@ -64,12 +65,14 @@ pipeline {
 
     // Runs an analysis of the code, looking for any
     // patterns that suggest potential bugs.
-    stage('Static Analysis') {
+    stage('SonarQube Analysis') {
       steps {
-        sh './gradlew sonarqube'
-        // wait for sonarqube to finish its analysis
-        sleep 5
-        sh './gradlew checkQualityGate'
+        withSonarQubeEnv('MySonarQube') {
+          sh './gradlew sonarqube'
+          // wait for sonarqube to finish its analysis
+          sleep 5
+          sh './gradlew checkQualityGate'
+        }
       }
     }
 
