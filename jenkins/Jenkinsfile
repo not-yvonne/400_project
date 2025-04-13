@@ -14,6 +14,9 @@ pipeline {
         // This is set so that the Python API tests will recognize it
         // and go through the Zap proxy waiting at 9888
         HTTP_PROXY = 'http://127.0.0.1:9888'
+        // Default Java Home for Jenkins (JDK 17)
+        JAVA_HOME = '/usr/lib/jvm/java-17-openjdk'
+        PATH = "${JAVA_HOME}/bin:${PATH}"
    }
 
   stages {
@@ -35,6 +38,11 @@ pipeline {
     // run all the unit tests - these do not require anything else
     // to be running and most run very quickly.
     stage('Unit Tests') {
+      environment {
+        // Override JAVA_HOME to use JDK 11 for this stage
+        JAVA_HOME = '/usr/lib/jvm/java-11-openjdk'
+        PATH = "${JAVA_HOME}/bin:${PATH}"
+      }
       steps {
         sh './gradlew test'
       }
@@ -79,6 +87,11 @@ pipeline {
     // Runs an analysis of the code, looking for any
     // patterns that suggest potential bugs.
     stage('SonarQube Analysis') {
+      environment {
+          // Override JAVA_HOME to use JDK 11 for this stage
+          JAVA_HOME = '/usr/lib/jvm/java-11-openjdk'
+          PATH = "${JAVA_HOME}/bin:${PATH}"
+        }   
       steps {
         withSonarQubeEnv('MySonarQube') {
           sh './gradlew sonarqube'
