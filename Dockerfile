@@ -23,6 +23,8 @@ FROM tomcat:9.0-jdk11-openjdk-slim
 # Set working directory in the runtime container
 WORKDIR /usr/local/tomcat/webapps/
 
+RUN ls -l /app/build/libs/
+
 # Copy the built WAR file from the Gradle build container
 COPY --from=build /app/build/libs/400_project-1.0.0.war ROOT.war
 
