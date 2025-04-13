@@ -17,13 +17,13 @@ COPY . /app
 # Build the WAR file using Gradle
 RUN gradle build --no-daemon
 
+RUN ls -l /app/build/libs/
+
 # Use a lightweight Tomcat image for deployment
 FROM tomcat:9.0-jdk11-openjdk-slim
 
 # Set working directory in the runtime container
 WORKDIR /usr/local/tomcat/webapps/
-
-RUN --from=build ls -l /app/build/libs/
 
 # Copy the built WAR file from the Gradle build container
 COPY --from=build /app/build/libs/400_project-1.0.0.war ROOT.war
