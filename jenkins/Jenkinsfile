@@ -94,7 +94,7 @@ pipeline {
         }   
       steps {
         withSonarQubeEnv('MySonarQube') {
-          sh './gradlew sonarqube'
+          sh './gradlew sonarqube -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login="admin" -Dsonar.password="ensf400"'
           // wait for sonarqube to finish its analysis
           sleep 5
           sh './gradlew checkQualityGate'
