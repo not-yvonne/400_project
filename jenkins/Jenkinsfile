@@ -16,12 +16,12 @@ pipeline {
                 sh 'java -version'
             }
         }
-        
+
     // build the war file (the binary).  This is the only
     // place that happens.
     stage('Build') {
       steps {
-        sh './gradlew clean assemble'
+        //sh './gradlew clean assemble'
         sh 'docker build -t my-repo/my-image:${BUILD_NUMBER} .'
       }
     }
