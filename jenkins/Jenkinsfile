@@ -202,20 +202,20 @@ pipeline {
          sh './gradlew pitest'
       }
     }
-
+    */
     stage('Build Documentation') {
       steps {
          sh './gradlew javadoc'
       }
     }
-    */
+    /*
     stage('Collect Zap Security Report') {
       steps {
         sh 'mkdir -p build/reports/zap'
         sh 'curl http://zap/OTHER/core/other/htmlreport --proxy localhost:9888 > build/reports/zap/zap_report.html'
       }
     }
-
+    */
 
     // This is the stage where we deploy to production.  If any test
     // fails, we won't get here.  Note that we aren't really doing anything - this
