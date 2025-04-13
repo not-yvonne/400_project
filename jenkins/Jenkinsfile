@@ -2,8 +2,14 @@
 
 pipeline {
 
-  agent any
-
+  agent {
+    docker { 
+              image 'docker:24.0.2' 
+              // or any Docker image that has the Docker CLI inside
+              args '-v /var/run/docker.sock:/var/run/docker.sock'
+    }
+  }
+  
    environment {
         // This is set so that the Python API tests will recognize it
         // and go through the Zap proxy waiting at 9888
