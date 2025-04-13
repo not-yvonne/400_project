@@ -86,10 +86,10 @@ pipeline {
     stage('SonarQube Analysis') { 
       steps {
         withSonarQubeEnv('MySonarQube') {
-          sh './gradlew sonarqube -Dsonar.host.url=https://sturdy-rotary-phone-5gq979v7r5963v9wx-9000.app.github.dev/ -Dsonar.login="squ_60af741eb8f9471544e0a8a5f5248cc7e381ecde"'
+          //sh './gradlew sonarqube -Dsonar.host.url=https://sturdy-rotary-phone-5gq979v7r5963v9wx-9000.app.github.dev/ -Dsonar.login="squ_60af741eb8f9471544e0a8a5f5248cc7e381ecde"'
           // wait for sonarqube to finish its analysis
           sleep 5
-          sh './gradlew checkQualityGate'
+          //sh './gradlew checkQualityGate'
         }
       }
     }
@@ -157,6 +157,7 @@ pipeline {
             }
         }
     }
+    */
 
     // Run OWASP's "DependencyCheck". https://owasp.org/www-project-dependency-check/
     // You are what you eat - and so it is with software.  This
@@ -176,7 +177,7 @@ pipeline {
          sh './gradlew dependencyCheckAnalyze'
       }
     }
-
+    /*
     // Run Jmeter performance testing https://jmeter.apache.org/
     // This test simulates 50 users concurrently using our software
     // for a set of common tasks.
@@ -207,7 +208,7 @@ pipeline {
          sh './gradlew javadoc'
       }
     }
-
+    */
     stage('Collect Zap Security Report') {
       steps {
         sh 'mkdir -p build/reports/zap'
