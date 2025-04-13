@@ -27,3 +27,6 @@ ENV PATH="${GRADLE_HOME}/gradle-${GRADLE_VERSION}/bin:${PATH}"
 
 # Verify installation
 RUN gradle -v
+
+# Change back to the Jenkins user
+USER jenkins
