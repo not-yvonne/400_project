@@ -86,7 +86,7 @@ pipeline {
     stage('SonarQube Analysis') { 
       steps {
         withSonarQubeEnv('MySonarQube') {
-          sh './gradlew sonarqube -Dsonar.host.url=https://sturdy-rotary-phone-5gq979v7r5963v9wx-9000.app.github.dev/ -Dsonar.login="admin" -Dsonar.password="ensf400"'
+          sh './gradlew sonarqube -Dsonar.host.url=https://sturdy-rotary-phone-5gq979v7r5963v9wx-9000.app.github.dev/ -Dsonar.login="squ_60af741eb8f9471544e0a8a5f5248cc7e381ecde"
           // wait for sonarqube to finish its analysis
           sleep 5
           sh './gradlew checkQualityGate'
