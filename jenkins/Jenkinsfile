@@ -86,12 +86,7 @@ pipeline {
 
     // Runs an analysis of the code, looking for any
     // patterns that suggest potential bugs.
-    stage('SonarQube Analysis') {
-      environment {
-          // Override JAVA_HOME to use JDK 11 for this stage
-          JAVA_HOME = '/usr/lib/jvm/java-11-openjdk'
-          PATH = "${JAVA_HOME}/bin:${PATH}"
-        }   
+    stage('SonarQube Analysis') { 
       steps {
         withSonarQubeEnv('MySonarQube') {
           sh './gradlew sonarqube -Dsonar.host.url=https://sonarcloud.io -Dsonar.login="admin" -Dsonar.password="ensf400"'
