@@ -9,7 +9,7 @@ pipeline {
               args '-v /var/run/docker.sock:/var/run/docker.sock'
     }
   }
-  
+
    environment {
         // This is set so that the Python API tests will recognize it
         // and go through the Zap proxy waiting at 9888
@@ -17,11 +17,11 @@ pipeline {
    }
 
   stages {
-    stage('Check Java Version') {
+    '''stage('Check Java Version') {
             steps {
                 sh 'java -version'
             }
-        }
+        }'''
 
     // build the war file (the binary).  This is the only
     // place that happens.
@@ -45,6 +45,7 @@ pipeline {
       }
     }
 
+    '''
     // run the tests which require connection to a
     // running database.
     stage('Database Tests') {
@@ -73,6 +74,7 @@ pipeline {
           }
         }
     }
+    '''
 
     // Runs an analysis of the code, looking for any
     // patterns that suggest potential bugs.
@@ -87,7 +89,7 @@ pipeline {
       }
     }
 
-
+    '''
     // Move the binary over to the test environment and
     // get it running, in preparation for tests that
     // require a whole system to be running.
@@ -219,7 +221,7 @@ pipeline {
         sh 'sleep 5'
       }
     }
-
+    '''
   }
 
 }
