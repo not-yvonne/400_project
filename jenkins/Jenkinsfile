@@ -14,9 +14,6 @@ pipeline {
         // This is set so that the Python API tests will recognize it
         // and go through the Zap proxy waiting at 9888
         HTTP_PROXY = 'http://127.0.0.1:9888'
-        // Default Java Home for Jenkins (JDK 17)
-        JAVA_HOME = '/usr/lib/jvm/java-17-openjdk'
-        PATH = "${JAVA_HOME}/bin:${PATH}"
    }
 
   stages {
