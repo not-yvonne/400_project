@@ -1,4 +1,21 @@
-sonarqube:
+version: '3'
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock  # mount docker socket so jenkins can use docker
+    restart: unless-stopped
+    networks:
+      - dev-network
+    depends_on:
+      - sonarqube
+
+  sonarqube:
     image: sonarqube:8.9-community
     container_name: sonarqube
     environment:
