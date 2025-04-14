@@ -63,7 +63,7 @@ pipeline {
         }
       }
     }
-    */
+
     // These are the Behavior Driven Development (BDD) tests
     // See the files in src/bdd_test
     // These tests do not require a running system.
@@ -79,17 +79,23 @@ pipeline {
           }
         }
     }
+    */
 
     // Runs an analysis of the code, looking for any
     // patterns that suggest potential bugs.
     stage('SonarQube Analysis') { 
+      environment {
+        // Override JAVA_HOME to use JDK 11 for this stage
+        JAVA_HOME = '/usr/lib/jvm/java-11-openjdk'
+        PATH = "${JAVA_HOME}/bin:${PATH}"
+      }
       steps {
-        withSonarQubeEnv('MySonarQube') {
-          //sh './gradlew sonarqube'
+        //withSonarQubeEnv('MySonarQube') {
+          sh './gradlew sonarqube -Dsonar.host.url=https://sturdy-rotary-phone-5gq979v7r5963v9wx-9000.app.github.dev/'
           // wait for sonarqube to finish its analysis
           sleep 5
-          sh './gradlew checkQualityGate'
-        }
+          sh './gradlew checkQualityGate -Dsonar.host.url=https://sturdy-rotary-phone-5gq979v7r5963v9wx-9000.app.github.dev/'
+        //}
       }
     }
 
