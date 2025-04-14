@@ -274,8 +274,7 @@ sonarqube {
         property "sonar.java.binaries", "build/classes/java/main"
         property "sonar.junit.reportPaths", "build/test-results/test/,build/test-results/integrate"
         property "sonar.coverage.jacoco.xmlReportPaths", "build/jacoco/jacoco.xml"
-        property "sonar.login", "admin"
-        property "sonar.password", "password"
+        property "sonar.login", "squ_00a95eb85a93f64637ca6d12e94faa86576c2b52"
     }
 }
 
@@ -450,7 +449,7 @@ task checkQualityGate() {
 
 // throws an exception if the quality gate fails.
 static void isQualityGateGood() {
-    URL url = new URL("http://localhost:9000/api/qualitygates/project_status?projectKey=Demo")
+    URL url = new URL("https://fantastic-guacamole-979xgx6g5w9jf776p-9000.app.github.dev/api/qualitygates/project_status?projectKey=Demo")
     HttpURLConnection connection = (HttpURLConnection) url.openConnection()
     connection.setRequestMethod("GET")
     connection.connect()
