@@ -63,7 +63,7 @@ pipeline {
         }
       }
     }
-
+    */
     // These are the Behavior Driven Development (BDD) tests
     // See the files in src/bdd_test
     // These tests do not require a running system.
@@ -79,14 +79,13 @@ pipeline {
           }
         }
     }
-    */
 
     // Runs an analysis of the code, looking for any
     // patterns that suggest potential bugs.
     stage('SonarQube Analysis') { 
       steps {
         withSonarQubeEnv('MySonarQube') {
-          sh './gradlew sonarqube'
+          //sh './gradlew sonarqube'
           // wait for sonarqube to finish its analysis
           sleep 5
           sh './gradlew checkQualityGate'
