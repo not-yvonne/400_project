@@ -4,7 +4,7 @@ pipeline {
 
   agent {
     docker { 
-              image 'docker:24.0.2'
+              image 'my-jenkins-image:latest' 
               // or any Docker image that has the Docker CLI inside
               args '-v /var/run/docker.sock:/var/run/docker.sock'
     }
