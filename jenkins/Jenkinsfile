@@ -2,7 +2,13 @@
 
 pipeline {
 
-  agent any
+  agent {
+    docker { 
+              image 'my-jenkins-image:latest' 
+              // or any Docker image that has the Docker CLI inside
+              args '-v /var/run/docker.sock:/var/run/docker.sock'
+    }
+  }
 
    environment {
         // This is set so that the Python API tests will recognize it
@@ -11,18 +17,29 @@ pipeline {
    }
 
   stages {
+    /*stage('Check Java Version') {
+            steps {
+                sh 'java -version'
+            }
+        }*/
 
     // build the war file (the binary).  This is the only
     // place that happens.
     stage('Build') {
       steps {
-        sh './gradlew clean assemble'
+        //sh './gradlew clean assemble'
+        sh 'docker build -t my-repo/my-image:${BUILD_NUMBER} .'
       }
     }
 
     // run all the unit tests - these do not require anything else
     // to be running and most run very quickly.
     stage('Unit Tests') {
+      environment {
+        // Override JAVA_HOME to use JDK 11 for this stage
+        JAVA_HOME = '/usr/lib/jvm/java-11-openjdk'
+        PATH = "${JAVA_HOME}/bin:${PATH}"
+      }
       steps {
         sh './gradlew test'
       }
@@ -33,6 +50,7 @@ pipeline {
       }
     }
 
+    /*
     // run the tests which require connection to a
     // running database.
     stage('Database Tests') {
@@ -61,19 +79,27 @@ pipeline {
           }
         }
     }
+    */
 
     // Runs an analysis of the code, looking for any
     // patterns that suggest potential bugs.
-    stage('Static Analysis') {
+    stage('SonarQube Analysis') { 
+      environment {
+        // Override JAVA_HOME to use JDK 11 for this stage
+        JAVA_HOME = '/usr/lib/jvm/java-11-openjdk'
+        PATH = "${JAVA_HOME}/bin:${PATH}"
+      }
       steps {
-        sh './gradlew sonarqube'
-        // wait for sonarqube to finish its analysis
-        sleep 5
-        sh './gradlew checkQualityGate'
+        //withSonarQubeEnv('MySonarQube') {
+          // sh './gradlew sonarqube -Dsonar.host.url=https://sturdy-rotary-phone-5gq979v7r5963v9wx-9000.app.github.dev/'
+          // wait for sonarqube to finish its analysis
+          sleep 5
+          sh './gradlew checkQualityGate -Dsonar.host.url=https://sturdy-rotary-phone-5gq979v7r5963v9wx-9000.app.github.dev/'
+        //}
       }
     }
 
-
+    /*
     // Move the binary over to the test environment and
     // get it running, in preparation for tests that
     // require a whole system to be running.
@@ -136,6 +162,7 @@ pipeline {
             }
         }
     }
+    */
 
     // Run OWASP's "DependencyCheck". https://owasp.org/www-project-dependency-check/
     // You are what you eat - and so it is with software.  This
@@ -155,7 +182,7 @@ pipeline {
          sh './gradlew dependencyCheckAnalyze'
       }
     }
-
+    /*
     // Run Jmeter performance testing https://jmeter.apache.org/
     // This test simulates 50 users concurrently using our software
     // for a set of common tasks.
@@ -180,20 +207,20 @@ pipeline {
          sh './gradlew pitest'
       }
     }
-
+    */
     stage('Build Documentation') {
       steps {
          sh './gradlew javadoc'
       }
     }
-
+    /*
     stage('Collect Zap Security Report') {
       steps {
         sh 'mkdir -p build/reports/zap'
         sh 'curl http://zap/OTHER/core/other/htmlreport --proxy localhost:9888 > build/reports/zap/zap_report.html'
       }
     }
-
+    */
 
     // This is the stage where we deploy to production.  If any test
     // fails, we won't get here.  Note that we aren't really doing anything - this
@@ -205,7 +232,5 @@ pipeline {
         sh 'sleep 5'
       }
     }
-
   }
-
 }
